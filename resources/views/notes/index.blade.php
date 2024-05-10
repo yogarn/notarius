@@ -58,6 +58,8 @@
                 </div>
             </div>
         @endforeach
-
+        <div class="mt-4">
+            {{ $notes->links() }}
+        </div>
     </div>
 </x-app-layout>
