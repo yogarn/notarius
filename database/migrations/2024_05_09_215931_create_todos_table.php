@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('title');
-            $table->longText('detail');
-            $table->dateTime('due');
-            $table->dateTime('scheduled');
+            $table->longText('detail')->nullable();
+            $table->dateTime('due', 0)->nullable();
+            $table->dateTime('scheduled', 0)->nullable();
             $table->integer('priority');
             $table->boolean('isCompleted');
             $table->timestamps();
