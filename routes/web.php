@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TodoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -19,5 +20,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('notes', NoteController::class)->middleware(['auth', 'verified'])->names('notes');
+
+Route::resource('todos', TodoController::class)->middleware(['auth', 'verified'])->names('todos');
+Route::put('/todos/{todo}/complete', [TodoController::class, 'complete'])->name('todos.complete');
+Route::put('/todos/{todo}/uncomplete', [TodoController::class, 'uncomplete'])->name('todos.uncomplete');
 
 require __DIR__ . '/auth.php';
