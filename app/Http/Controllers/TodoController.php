@@ -22,6 +22,7 @@ class TodoController extends Controller
     public function index()
     {
         $todos = Todo::query()
+            ->where('user_id', request()->user()->id)
             ->orderBy('isCompleted', 'asc')
             ->orderBy('priority', 'desc')
             ->orderBy('due', 'asc')
@@ -61,6 +62,9 @@ class TodoController extends Controller
      */
     public function show(Todo $todo)
     {
+        if ($todo->user_id != request()->user()->id) {
+            return to_route('todos.index');
+        }
         return view('todos.show', ['todo' => $todo, 'priorityLabels' => self::$priorityLabels]);
     }
 
@@ -69,6 +73,9 @@ class TodoController extends Controller
      */
     public function edit(Todo $todo)
     {
+        if ($todo->user_id != request()->user()->id) {
+            return to_route('todos.index');
+        }
         return view('todos.edit', ['todo' => $todo]);
     }
 
@@ -77,6 +84,9 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
+        if ($todo->user_id != request()->user()->id) {
+            return to_route('todos.index');
+        }
         $data = $request->validate([
             'title' => ['string', 'required'],
             'detail' => 'nullable|string',
@@ -94,18 +104,27 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
+        if ($todo->user_id != request()->user()->id) {
+            return to_route('todos.index');
+        }
         $todo->delete();
         return to_route('todos.index');
     }
 
     public function complete(Todo $todo)
     {
+        if ($todo->user_id != request()->user()->id) {
+            return to_route('todos.index');
+        }
         $todo->update(['isCompleted' => true]);
         return redirect()->back();
     }
 
     public function uncomplete(Todo $todo)
     {
+        if ($todo->user_id != request()->user()->id) {
+            return to_route('todos.index');
+        }
         $todo->update(['isCompleted' => false]);
         return redirect()->back();
     }
