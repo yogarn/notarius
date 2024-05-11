@@ -24,7 +24,7 @@
                         <h3 class="text-lg font-semibold mb-2 {{ $todo->isCompleted ? 'line-through' : '' }}">
                             {{ $todo->title }}</h3>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-4">
-                            {{ \Carbon\Carbon::parse($todo->scheduled)->diffForHumans() }}
+                            {{ $todo->due ? \Carbon\Carbon::parse($todo->due)->diffForHumans() : 'No due date'}}
                         </p>
                     </div>
                 </a>
