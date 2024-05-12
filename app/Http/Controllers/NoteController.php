@@ -12,10 +12,22 @@ class NoteController extends Controller
      */
     public function index()
     {
+        $query = request()->input('query');
+
         $notes = Note::query()
-            ->where('user_id',  request()->user()->id)
-            ->orderBy('updated_at', 'desc')
-            ->paginate(15);
+            ->where('user_id', request()->user()->id)
+            ->orderBy('updated_at', 'desc');
+
+        if ($query) {
+            $notes->where(function ($notes) use ($query) {
+                $notes
+                    ->where('title', 'like', "%$query%")
+                    ->orWhere('content', 'like', "%$query%");
+            });
+        }
+
+        $notes = $notes->paginate(15);
+
         return view('notes.index', ['notes' => $notes]);
     }
 

@@ -4,6 +4,18 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Notes') }}
             </h2>
+            <!-- Search Box -->
+            <div class="max-w-lg mx-auto">
+                <form action="{{ route('notes.index') }}" method="GET" class="flex items-center shadow-md">
+                    <input type="text" name="query" placeholder="Search notes..."
+                        value="{{ request()->input('query') ?? '' }}"
+                        class="w-full border-gray-300 dark:border-gray-700 rounded-l-md py-2 px-4 focus:outline-none focus:border-gray-500 dark:bg-gray-800 dark:text-gray-200">
+                    <button type="submit"
+                        class="bg-gray-500 hover:bg-gray-600 text-white rounded-r-md px-4 py-2 focus:outline-none focus:bg-gray-600">
+                        Search
+                    </button>
+                </form>
+            </div>
             <a href="{{ route('notes.create') }}"
                 class="text-gray-500 dark:text-gray-300 hover:text-gray-600 dark:hover:text-gray-400">
                 <svg class="h-6 w-6 text-slate-500" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
