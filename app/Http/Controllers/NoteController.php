@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Note;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class NoteController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', Note::class);
         $query = request()->input('query');
 
         $notes = Note::query()
@@ -36,6 +40,7 @@ class NoteController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Note::class);
         return view('notes.create');
     }
 
@@ -44,6 +49,7 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Note::class);
         $data = $request->validate([
             'title' => ['string', 'required'],
             'content' => ['string', 'required']
@@ -59,9 +65,7 @@ class NoteController extends Controller
      */
     public function show(Note $note)
     {
-        if ($note->user_id != request()->user()->id) {
-            return to_route('notes.index');
-        }
+        $this->authorize('view', $note);
         return view('notes.show', ['note' => $note]);
     }
 
@@ -70,9 +74,7 @@ class NoteController extends Controller
      */
     public function edit(Note $note)
     {
-        if ($note->user_id != request()->user()->id) {
-            return to_route('notes.index');
-        }
+        $this->authorize('update', $note);
         return view('notes.edit', ['note' => $note]);
     }
 
@@ -81,10 +83,7 @@ class NoteController extends Controller
      */
     public function update(Request $request, Note $note)
     {
-        if ($note->user_id != request()->user()->id) {
-            return to_route('notes.index');
-        }
-
+        $this->authorize('update', $note);
         $data = $request->validate([
             'title' => ['string', 'required'],
             'content' => ['string', 'required']
@@ -99,10 +98,7 @@ class NoteController extends Controller
      */
     public function destroy(Note $note)
     {
-        if ($note->user_id != request()->user()->id) {
-            return to_route('notes.index');
-        }
-
+        $this->authorize('delete', $note);
         $note->delete();
         return to_route('notes.index');
     }
