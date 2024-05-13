@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class TodoController extends Controller
 {
+    use AuthorizesRequests;
+
     protected static $priorityLabels = [
         0 => 'Very Low',
         1 => 'Low',
@@ -21,6 +24,7 @@ class TodoController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Todo::class);
         $todos = Todo::query()
             ->where('user_id', request()->user()->id)
             ->orderBy('isCompleted', 'asc')
@@ -35,6 +39,7 @@ class TodoController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Todo::class);
         return view('todos.create');
     }
 
@@ -43,6 +48,7 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Todo::class);
         $data = $request->validate([
             'title' => ['string', 'required'],
             'detail' => 'nullable|string',
@@ -62,9 +68,7 @@ class TodoController extends Controller
      */
     public function show(Todo $todo)
     {
-        if ($todo->user_id != request()->user()->id) {
-            return to_route('todos.index');
-        }
+        $this->authorize('view', $todo);
         return view('todos.show', ['todo' => $todo, 'priorityLabels' => self::$priorityLabels]);
     }
 
@@ -73,9 +77,7 @@ class TodoController extends Controller
      */
     public function edit(Todo $todo)
     {
-        if ($todo->user_id != request()->user()->id) {
-            return to_route('todos.index');
-        }
+        $this->authorize('update', $todo);
         return view('todos.edit', ['todo' => $todo]);
     }
 
@@ -84,9 +86,7 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
-        if ($todo->user_id != request()->user()->id) {
-            return to_route('todos.index');
-        }
+        $this->authorize('update', $todo);
         $data = $request->validate([
             'title' => ['string', 'required'],
             'detail' => 'nullable|string',
@@ -104,27 +104,21 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        if ($todo->user_id != request()->user()->id) {
-            return to_route('todos.index');
-        }
+        $this->authorize('delete', $todo);
         $todo->delete();
         return to_route('todos.index');
     }
 
     public function complete(Todo $todo)
     {
-        if ($todo->user_id != request()->user()->id) {
-            return to_route('todos.index');
-        }
+        $this->authorize('update', $todo);
         $todo->update(['isCompleted' => true]);
         return redirect()->back();
     }
 
     public function uncomplete(Todo $todo)
     {
-        if ($todo->user_id != request()->user()->id) {
-            return to_route('todos.index');
-        }
+        $this->authorize('update', $todo);
         $todo->update(['isCompleted' => false]);
         return redirect()->back();
     }
