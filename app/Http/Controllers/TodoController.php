@@ -25,12 +25,23 @@ class TodoController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Todo::class);
+        $query = request()->input('query');
+
         $todos = Todo::query()
             ->where('user_id', request()->user()->id)
             ->orderBy('isCompleted', 'asc')
             ->orderBy('priority', 'desc')
-            ->orderBy('due', 'asc')
-            ->paginate(15);
+            ->orderBy('due', 'asc');
+
+        if ($query) {
+            $todos->where(function ($todos) use ($query) {
+                $todos
+                    ->where('title', 'like', "%$query%")
+                    ->orWhere('detail', 'like', "%$query%");
+            });
+        }
+
+        $todos = $todos->paginate(15);
         return view('todos.index', ['todos' => $todos]);
     }
 
