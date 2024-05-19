@@ -21,8 +21,6 @@ class SubTodoFactory extends Factory
             'todo_id' => 1,
             'title' => fake()->realText(100),
             'detail' => fake()->realText(2000),
-            'due' => fake()->dateTimeBetween('-1 weeks', '1 weeks'),
-            'scheduled' => fake()->dateTimeBetween('-1 weeks', '1 weeks'),
             'priority' => fake()->numberBetween(0, 5),
             'isCompleted' => fake()->boolean(50)
         ];

@@ -17,8 +17,6 @@ return new class extends Migration
             $table->foreignId('todo_id')->constrained('todos');
             $table->string('title');
             $table->longText('detail')->nullable();
-            $table->dateTime('due', 0)->nullable();
-            $table->dateTime('scheduled', 0)->nullable();
             $table->integer('priority');
             $table->boolean('isCompleted');
             $table->timestamps();
