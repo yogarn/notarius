@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Note;
+use App\Models\SubTodo;
 use App\Models\Todo;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -25,5 +26,11 @@ class DatabaseSeeder extends Seeder
         Note::factory(100)->create();
 
         Todo::factory(30)->create();
+
+        for ($i = 1; $i < 10; $i++) {
+            SubTodo::factory(5)->create([
+                'todo_id' => $i
+            ]);
+        }
     }
 }
