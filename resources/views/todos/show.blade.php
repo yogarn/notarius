@@ -18,8 +18,8 @@
         <div class="grid grid-cols-1 gap-6">
             <div class="relative bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-lg font-semibold mb-2 {{ $todo->isCompleted ? 'line-through' : '' }}">
-                        {{ $todo->title }}</h3>
+                    <p class="text-lg font-semibold mb-2 {{ $todo->isCompleted ? 'line-through' : '' }}">
+                        {{ $todo->title }}</p>
                     <p class="text-sm">{{ $todo->detail }}</p>
                 </div>
                 <div class="absolute top-2 right-2">
@@ -34,6 +34,24 @@
                                 : '<svg class="h-8 w-8 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" /></svg>' !!}
                         </button>
                     </form>
+                </div>
+                <!-- Subtodos Section -->
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <h3 class="text-lg font-semibold mb-2">Subtodos</h3>
+                    @foreach($subtodos as $subtodo)
+                        <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 py-2">
+                            <p class="text-sm">{{ $subtodo->title }}</p>
+                            <form action="" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="text-blue-500 hover:text-blue-700">
+                                    {!! $subtodo->isCompleted
+                                        ? '<svg class="h-6 w-6 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" />  <path d="M9 12l2 2l4 -4" /></svg>'
+                                        : '<svg class="h-6 w-6 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" /></svg>' !!}
+                                </button>
+                            </form>
+                        </div>
+                    @endforeach
                 </div>
                 <!-- Priority -->
                 <div class="p-6 border-t border-gray-200 dark:text-white-200 dark:border-gray-700">

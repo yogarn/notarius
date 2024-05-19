@@ -80,7 +80,11 @@ class TodoController extends Controller
     public function show(Todo $todo)
     {
         $this->authorize('view', $todo);
-        return view('todos.show', ['todo' => $todo, 'priorityLabels' => self::$priorityLabels]);
+        $subtodos = $todo
+            ->subtodo()
+            ->orderBy('priority', 'desc')
+            ->get();
+        return view('todos.show', ['todo' => $todo, 'subtodos' => $subtodos, 'priorityLabels' => self::$priorityLabels]);
     }
 
     /**
