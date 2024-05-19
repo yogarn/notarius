@@ -9,5 +9,9 @@ class SubTodo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'todo_id', 'title', 'detail', 'due', 'scheduled', 'priority', 'isCompleted'];
+    protected $fillable = ['user_id', 'todo_id', 'title', 'detail', 'priority', 'isCompleted'];
+
+    public function todo() {
+        return $this->hasOne('App/Models/Todo');
+    }
 }
